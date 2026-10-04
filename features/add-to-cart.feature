@@ -6,7 +6,8 @@ Feature: Cart Actions
     When I execute login with "standard_user" and "secret_sauce"
     And I add "Sauce Labs Backpack" to the cart
     Then I see cart badge count as "1"
-    And I see "Sauce Labs Backpack" in the cart
+    When I open the shopping cart
+    Then I see "Sauce Labs Backpack" in the cart
 
 @Regression
   Scenario: Do the Payment

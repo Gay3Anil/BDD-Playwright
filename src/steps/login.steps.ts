@@ -3,8 +3,18 @@ import { test } from "../fixtures/bdd-fixtures";
 
 const { Given, When, Then } = createBdd(test);
 
+Given("I navigate to the login view", async ({ loginPage }) => {
+  await loginPage.navigateToLoginPage();
+});
+
 Given("I navigate to the login page", async ({ loginPage }) => {
   await loginPage.navigateToLoginPage();
+});
+
+When("I execute login with {string} and {string}", async ({ loginPage }, username: string, password: string) => {
+  await loginPage.enterCredentials(username, password);
+  await loginPage.clickLogin();
+  await loginPage.verifySuccessfulLogin();
 });
 
 Given("I am logged in as a standard user", async ({ loginPage }) => {
