@@ -2,6 +2,11 @@ node_modules/
 dist/
 reports/cucumber-report.html
 screenshots/*.png
+.features-gen/
+test-results/
+playwright-report/
+allure-results/
+allure-report/
 
 # Keep the example environment files in this starter project. Replace demo values
 # and avoid committing real secrets when adapting the framework.

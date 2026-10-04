@@ -1,11 +1,31 @@
-import { testConfig } from "./config/config";
+import { defineConfig, devices } from '@playwright/test';
+import { defineBddConfig } from 'playwright-bdd';
+import { Config } from './utils/config'
 
-// These are Playwright library settings consumed by the Cucumber hooks; this is not a Playwright Test config.
-const playwrightConfig = {
-  baseURL: testConfig.baseUrl,
-  browser: testConfig.browser,
-  headless: testConfig.headless,
-  timeout: testConfig.timeout
-} as const;
+const testDir = defineBddConfig({
+  features: 'features/*.feature',
+  steps: [
+    'src/steps/*.ts',
+    'src/fixtures/bdd-fixtures.ts',
+  ],
+});
 
-export default playwrightConfig;
+export default defineConfig({
+  testDir,
+  fullyParallel: true,
+  workers: process.env.CI ? 2 : undefined,
+  reporter: [
+    ['list'],
+    ['allure-playwright', { outputFolder: 'allure-results' }]
+  ],
+  use: {
+    baseURL: Config.baseUrl,
+    headless: true,
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    { name: 'chrome', use: { ...devices['Desktop Chrome'], channel: 'chrome' } }
+  ],
+});

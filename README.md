@@ -22,6 +22,109 @@ package.json           Dependencies and npm commands
 README.md              Setup and execution guide
 ```
 
+## Project Architecture
+
+```text
+features/                 Gherkin scenarios and tags
+src/steps/                Playwright-BDD Given/When/Then implementations
+src/pages/                Page Object Model selectors and interactions
+src/fixtures/             Shared page-object fixtures
+config/                   Environment files and validated runtime settings
+utils/config.ts           Runtime settings consumed by Playwright config
+playwright.config.ts      Feature discovery, browser, and reporter configuration
+.features-gen/            Generated tests (created by bddgen)
+allure-results/           Allure reporter output
+test-results/             Playwright results, screenshots, video, and traces
+package.json              Dependencies and npm scripts
+README.md                 Setup and execution guide
+```
+
+Feature files describe behavior using Gherkin. Step definitions connect those steps to reusable page objects. The fixture file provides page objects to each scenario, and Playwright-BDD generates runnable tests before Playwright executes them.
+
+## Installation
+
+```sh
+npm ci
+npx playwright install chromium
+```
+
+## Environment Configuration
+
+`config/.env.qa` and `config/.env.uat` contain the SauceDemo URL and demo credentials. Select one with `TEST_ENV=qa` or `TEST_ENV=uat`. The default is `qa`. You can override values with process environment variables:
+
+```text
+BASE_URL=https://www.saucedemo.com/
+USERNAME=standard_user
+PASSWORD=secret_sauce
+```
+
+PowerShell example:
+
+```powershell
+$env:TEST_ENV = "uat"
+npm run test:bdd
+```
+
+## Running Tests
+
+Run all feature scenarios:
+
+```sh
+npm run test:bdd
+```
+
+Run a specific scenario or feature by its title:
+
+```sh
+npm run test:bdd -- --grep "Add a product to the cart"
+```
+
+Run scenarios tagged `@smoke`:
+
+```sh
+npm run test:bdd:smoke
+```
+
+Run in headed mode:
+
+```sh
+npm run test:bdd:headed
+```
+
+Generate the Playwright HTML report:
+
+```sh
+npm run test:bdd:html
+```
+
+The HTML report is written to `playwright-report/index.html`. Allure results are written to `allure-results/`.
+
+## Failure Artifacts
+
+Playwright captures a screenshot on failure and retains video and trace data according to `playwright.config.ts`. These artifacts are written under `test-results/`; the GitHub Actions workflow uploads test artifacts after each run.
+
+## End-to-End Flow
+
+```text
+Feature File
+     ↓
+Playwright-BDD Generator (bddgen)
+     ↓
+Generated Playwright Test
+     ↓
+Step Definition
+     ↓
+Fixture and Page Object
+     ↓
+Playwright
+     ↓
+Browser and SauceDemo
+     ↓
+Playwright / Allure Report
+```
+
+The original Cucumber scaffold is retained separately and can be run with `npm run test:bdd:cucumber`.
+
 The feature file describes behavior in Gherkin. Step definitions bind those sentences to methods on `LoginPage`. Cucumber creates a new typed World for each scenario; hooks put that scenario's Playwright browser, BrowserContext, Page, and page object on the World.
 
 ## Installation

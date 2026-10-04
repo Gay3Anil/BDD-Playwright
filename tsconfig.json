@@ -17,6 +17,7 @@
     "hooks/**/*.ts",
     "pages/**/*.ts",
     "playwright.config.ts",
+    "src/**/*.ts",
     "step-definitions/**/*.ts",
     "support/**/*.ts",
     "test-runner/**/*.ts"

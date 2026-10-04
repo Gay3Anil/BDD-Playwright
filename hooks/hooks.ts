@@ -3,29 +3,29 @@ import { resolve } from "node:path";
 import { After, Before, Status, setDefaultTimeout, setWorldConstructor } from "@cucumber/cucumber";
 import { chromium, firefox, webkit } from "playwright";
 import type { BrowserType } from "playwright";
-import playwrightConfig from "../playwright.config";
+import { testConfig } from "../config/config";
 import { LoginPage } from "../pages/LoginPage";
 import { CustomWorld } from "../support/world";
 
 setWorldConstructor(CustomWorld);
-setDefaultTimeout(playwrightConfig.timeout);
+setDefaultTimeout(testConfig.timeout);
 
 Before(async function (this: CustomWorld) {
-  const browserTypes: Record<typeof playwrightConfig.browser, BrowserType> = {
+  const browserTypes: Record<typeof testConfig.browser, BrowserType> = {
     chromium,
     firefox,
     webkit
   };
 
   // Browser is the launched engine; each scenario gets its own browser, context, and page.
-  this.browser = await browserTypes[playwrightConfig.browser].launch({
-    headless: playwrightConfig.headless
+  this.browser = await browserTypes[testConfig.browser].launch({
+    headless: testConfig.headless
   });
 
   // BrowserContext isolates cookies/storage; Page is the tab used by the page object.
   this.context = await this.browser.newContext();
   this.page = await this.context.newPage();
-  this.page.setDefaultTimeout(playwrightConfig.timeout);
+  this.page.setDefaultTimeout(testConfig.timeout);
   this.loginPage = new LoginPage(this.page);
 });
 
