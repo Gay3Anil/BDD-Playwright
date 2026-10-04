@@ -1,0 +1,7 @@
+node_modules/
+dist/
+reports/cucumber-report.html
+screenshots/*.png
+
+# Keep the example environment files in this starter project. Replace demo values
+# and avoid committing real secrets when adapting the framework.
